@@ -1,0 +1,8 @@
+USERNAME = 'charliec'
+PASSWORD = 'mmadecoded123'
+DATABASE = 'mmadecoded'
+FIGHTERS_COL = 'fighters'
+EVENTS_COL = 'events'
+FIGHTS_COL = 'fights'
+SIG_STRIKE_STATS_COL = 'sig_strike_stats'
+MISC_STATS_COL = 'misc_stats'

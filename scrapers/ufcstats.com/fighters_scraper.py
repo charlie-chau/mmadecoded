@@ -6,7 +6,7 @@ import re
 from bs4 import BeautifulSoup
 from helpers.request_helper import *
 from helpers.db_helper import *
-from string import ascii_lowercase
+# from string import ascii_lowercase
 from datetime import datetime
 
 URL_BASE = 'http://www.ufcstats.com/statistics/fighters'
@@ -14,8 +14,9 @@ DB = get_db()
 
 
 def navigate_fighter_list():
+    ascii_lowercase = ['v', 'w', 'x', 'y', 'z']
     for char in ascii_lowercase:
-        fighter_list_url = URL_BASE + '?char=' + str(char)
+        fighter_list_url = URL_BASE + '?char=' + str(char) + '&page=all'
         print("On page \'{}\': {}".format(char, fighter_list_url))
         fighter_list_soup = soupify_page(fighter_list_url)
 
@@ -66,7 +67,7 @@ def scrape_fighter_details(fighter_row):
     fighter_detail['losses'] = losses
     fighter_detail['draws'] = draws
 
-    insert_fighter(DB, fighter_detail)
+    upsert_fighter(DB, fighter_detail)
 
     return
 
