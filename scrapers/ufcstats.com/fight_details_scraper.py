@@ -14,16 +14,20 @@ DB = get_db()
 
 
 def navigate_event_list():
-    events_url = URL_BASE + '?page=all'
+    # events_url = URL_BASE + '?page=all'
+    events_url = URL_BASE
     events_soup = soupify_page(events_url)
 
     # Get all 'a' elements that represent a UFC event
     event_hrefs = events_soup.find_all('a', {'class': 'b-link_style_black'})
     event_urls = [event_href.get('href') for event_href in event_hrefs]  # Extract urls
 
+    print(len(event_urls))
     # print(event_urls.index('http://www.ufcstats.com/event-details/cedfdf8d423d500c'))
-    for idx, event_url in enumerate(event_urls[488:]):
+    # for idx, event_url in enumerate(event_urls[488:]):
+    for idx, event_url in enumerate(event_urls):
         scrape_event(event_url, idx)
+    # scrape_event('http://www.ufcstats.com/event-details/94a5aaf573f780ad', 0)
 
 
 def scrape_event(event_url, idx):
@@ -41,6 +45,7 @@ def scrape_event(event_url, idx):
     event_details['name'] = event_name
     event_details['location'] = event_location
     event_details['date'] = event_date
+    event_details['organisation'] = 'ufc'
 
     tz = pytz.timezone('Australia/Sydney')
     curr_time = datetime.now(tz).strftime('%Y-%m-%d %H:%M:%S')
@@ -81,6 +86,8 @@ def scrape_event(event_url, idx):
 
         if fight_result == 'win':
             fight_details['winner'] = fight_details['fighter1_id']
+        elif fight_result == 'nc':
+            fight_details['winner'] = 'nc'
         else:
             fight_details['winner'] = None
 

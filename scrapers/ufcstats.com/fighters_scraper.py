@@ -14,7 +14,8 @@ DB = get_db()
 
 
 def navigate_fighter_list():
-    ascii_lowercase = ['v', 'w', 'x', 'y', 'z']
+    ascii_lowercase = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
+                       't', 'u', 'v', 'w', 'x', 'y', 'z']
     for char in ascii_lowercase:
         fighter_list_url = URL_BASE + '?char=' + str(char) + '&page=all'
         print("On page \'{}\': {}".format(char, fighter_list_url))
@@ -25,8 +26,10 @@ def navigate_fighter_list():
         del fighter_rows[0]
         del fighter_rows[0]
 
+        # scrape_fighter_details(fighter_rows[176])
         for fighter_row in fighter_rows:
             scrape_fighter_details(fighter_row)
+            print('INDEX {}: {}'.format(fighter_rows.index(fighter_row), fighter_row))
 
 
 def scrape_fighter_details(fighter_row):
