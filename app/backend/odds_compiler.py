@@ -125,11 +125,37 @@ class OddsCompiler:
         fighter_2_kelly_criterion = (((fighter2_odds - 1) * (1 - fighter1_win_prob)) - fighter1_win_prob) / (
                 fighter2_odds - 1)
 
-        table = tabulate([[fighter1_name, fighter1_snapshot['mu'], fighter1_odds, round((1 / fighter1_odds) * 100, 2),
+        fighter1_id = fighter1_snapshot['fighter_id']
+        fighter2_id = fighter2_snapshot['fighter_id']
+
+        fighter1_fight_hist = get_mod_glicko_history_fighter_all(self._db, fighter1_id)
+        fighter2_fight_hist = get_mod_glicko_history_fighter_all(self._db, fighter2_id)
+
+        fighter1_wins = []
+        fighter1_losses = []
+        for fight in fighter1_fight_hist:
+            if fight['result'] == 'WIN':
+                fighter1_wins.append(fight)
+            if fight['result'] == 'LOSS':
+                fighter1_losses.append(fight)
+
+        fighter2_wins = []
+        fighter2_losses = []
+        for fight in fighter2_fight_hist:
+            if fight['result'] == 'WIN':
+                fighter2_wins.append(fight)
+            if fight['result'] == 'LOSS':
+                fighter2_losses.append(fight)
+
+        fighter1_record = '{} - {}'.format(len(fighter1_wins), len(fighter1_losses))
+        fighter2_record = '{} - {}'.format(len(fighter2_wins), len(fighter2_losses))
+
+        table = tabulate([['{} ({})'.format(fighter1_name, fighter1_record), fighter1_snapshot['mu'], fighter1_odds,
+                           round((1 / fighter1_odds) * 100, 2),
                            str(round(fighter1_win_prob * 100, 2)) + '%',
                            str(round(fighter_1_expected_return * 100, 2)) + '%',
                            str(round(fighter_1_kelly_criterion * 100, 2)) + '%'],
-                          [fighter2_name, fighter2_snapshot['mu'], fighter2_odds,
+                          ['{} ({})'.format(fighter2_name, fighter2_record), fighter2_snapshot['mu'], fighter2_odds,
                            str(round((1 / fighter2_odds) * 100, 2)) + '%',
                            str(round((1 - fighter1_win_prob) * 100, 2)) + '%',
                            str(round(fighter_2_expected_return * 100, 2)) + '%',

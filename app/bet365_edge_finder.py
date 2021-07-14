@@ -15,9 +15,10 @@ from tabulate import tabulate
 import time
 
 DB = get_db()
-URL = 'https://www.bet365.com.au/#/AC/B9/C20511432/D1/E148/F2/'  # UFC
+# URL = 'https://www.bet365.com.au/#/AC/B9/C20511432/D1/E148/F2/'  # UFC
 # URL = 'https://www.bet365.com.au/#/AC/B9/C20686688/D1/E148/F2/' # Bellator
 # URL = 'https://www.bet365.com.au/#/AC/B9/C20686690/D1/E148/F2/'  # Combate
+URL = 'https://www.sherdog.com/events'
 MULTIPLIER = 2
 MODELS = ['20200323_2.h5', '20200326.h5', '20200327.h5']
 

@@ -124,7 +124,7 @@ def brier_loss(y_true, y_pred):
     return brier_loss
 
 
-def get_nn_prob(DB, model, fighter1_snapshot, fighter2_snapshot):
+def get_nn_prob(DB, model, fighter1_snapshot, fighter2_snapshot, mu_1, mu_2):
     fighter1 = get_fighter_by_id(DB, fighter1_snapshot['fighter_id'])
     fighter2 = get_fighter_by_id(DB, fighter2_snapshot['fighter_id'])
 
@@ -140,7 +140,7 @@ def get_nn_prob(DB, model, fighter1_snapshot, fighter2_snapshot):
     fight['a_age'] = float(get_fighter_age(fighter1['date_of_birth']))
     fight['a_height_cm'] = float(fighter1['height_cm'])
     fight['a_weight_kg'] = float(fighter1['weight_kg'])
-    fight['a_mu'] = float(fighter1_snapshot['mu'])
+    fight['a_mu'] = float(mu_1)
     fight['a_phi'] = float(fighter1_snapshot['phi'])
     fight['a_sigma'] = float(fighter1_snapshot['sigma'])
     fight['a_fight_count'] = float(fighter1_snapshot['fighter_count'])
@@ -151,7 +151,7 @@ def get_nn_prob(DB, model, fighter1_snapshot, fighter2_snapshot):
     fight['b_age'] = float(get_fighter_age(fighter2['date_of_birth']))
     fight['b_height_cm'] = float(fighter2['height_cm'])
     fight['b_weight_kg'] = float(fighter2['weight_kg'])
-    fight['b_mu'] = float(fighter2_snapshot['mu'])
+    fight['b_mu'] = float(mu_2)
     fight['b_phi'] = float(fighter2_snapshot['phi'])
     fight['b_sigma'] = float(fighter2_snapshot['sigma'])
     fight['b_fight_count'] = float(fighter2_snapshot['fighter_count'])
@@ -310,7 +310,7 @@ if fighter_1 and fighter_2 and prob_multiplier:
     st.subheader('Expected odds for {}: {}'.format(fighter_2, round(fighter_2_odds_a, 2)))
 
     st.subheader('== NN MODEL {} =='.format(MODEL1))
-    probability_b = get_nn_prob(DB, MODEL1, fighter_1_score_data_final, fighter_2_score_data_final)
+    probability_b = get_nn_prob(DB, MODEL1, fighter_1_score_data_final, fighter_2_score_data_final, mu_1, mu_2)
     st.subheader('Probability that {} defeats {}: {}'.format(fighter_1, fighter_2, round(float(probability_b), 4)))
     st.subheader('Probability that {} defeats {}: {}'.format(fighter_2, fighter_1, round(float(1 - probability_b), 4)))
 
@@ -320,7 +320,7 @@ if fighter_1 and fighter_2 and prob_multiplier:
     st.subheader('Expected odds for {}: {}'.format(fighter_2, round(fighter_2_odds_b, 2)))
 
     st.subheader('== NN MODEL {} =='.format(MODEL2))
-    probability_c = get_nn_prob(DB, MODEL2, fighter_1_score_data_final, fighter_2_score_data_final)
+    probability_c = get_nn_prob(DB, MODEL2, fighter_1_score_data_final, fighter_2_score_data_final, mu_1, mu_2)
     st.subheader('Probability that {} defeats {}: {}'.format(fighter_1, fighter_2, round(float(probability_c), 4)))
     st.subheader('Probability that {} defeats {}: {}'.format(fighter_2, fighter_1, round(float(1 - probability_c), 4)))
 

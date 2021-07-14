@@ -47,7 +47,7 @@ def get_events_list_for_date(date):
 
 def get_date_list_from_start(date):
     curr_date = date
-    target_date = '2021-04-10'
+    target_date = '2021-05-28'
     date_list = []
 
     while curr_date != target_date:
@@ -472,7 +472,7 @@ def get_win_prob_with_multiplier(hist, multiplier):
 # MAIN FUNCTION
 if __name__ == "__main__":
     # iterate_events('2019-09-30')
-    date_list = get_date_list_from_start('2021-02-23')
+    date_list = get_date_list_from_start('2021-04-09')
     print(date_list)
 
     for date in date_list:

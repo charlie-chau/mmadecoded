@@ -2,6 +2,12 @@ from bs4 import BeautifulSoup
 from helpers.request_helper import *
 from helpers.sherdog_db_helper import *
 
+from selenium import webdriver
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+
 BASE_URL = 'https://www.sherdog.com'
 EVENTS_URL = BASE_URL + '/events/'
 DB = get_db()
@@ -50,7 +56,24 @@ def scrape_events_list(events_list):
 
 
 def soupify_page(url):
-    dom = simple_get(url)
+    # dom = simple_get(url)
+    # print(dom)
+    # soup = BeautifulSoup(dom, 'lxml')
+
+    driver = webdriver.Chrome(executable_path='chromedriver.exe')
+    driver.implicitly_wait(100)
+    driver.get(url)
+    # driver.get('https://www.google.com.au')
+    timeout = 5
+
+    try:
+        element_present = EC.presence_of_element_located((By.CLASS_NAME, 'recentfights_tab'))
+        WebDriverWait(driver, timeout).until(element_present)
+    except TimeoutException:
+        print("Timed out waiting for page to load")
+
+    dom = driver.page_source
+
     soup = BeautifulSoup(dom, 'lxml')
 
     return soup

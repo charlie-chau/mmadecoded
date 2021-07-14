@@ -11,11 +11,17 @@ def simple_get(url):
     If the content-type of response is some kind of HTML/XML, return the
     text content, otherwise return None.
     """
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36',
+        'referer': 'https://www.sherdog.com/',
+        'origin': 'https://www.sherdog.com/'
+    }
     try:
-        with closing(get(url, stream=True)) as resp:
+        with closing(get(url, headers=headers, stream=True)) as resp:
             if is_good_response(resp):
                 return resp.content
             else:
+                print(resp)
                 return None
 
     except RequestException as e:

@@ -5,8 +5,15 @@ import bson
 from multiprocessing import Pool
 import traceback
 
+from selenium import webdriver
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+
 BASE_URL = 'https://www.sherdog.com'
 DB = get_db()
+driver = webdriver.Chrome(executable_path='chromedriver.exe')
 
 
 def main(date):
@@ -415,19 +422,40 @@ def scrape_fighter(fighter_url):
     return id
 
 def soupify_page(url):
-    dom = simple_get(url)
-    if dom is not None:
-        soup = BeautifulSoup(dom, 'lxml')
+    # dom = simple_get(url)
+    # if dom is not None:
+    #     soup = BeautifulSoup(dom, 'lxml')
+    #
+    #     return soup
+    # return None
 
-        return soup
-    return None
+    # driver.implicitly_wait(100)
+    driver.get(url)
+    # driver.get('https://www.google.com.au')
+    timeout = 5
+
+    try:
+        element_present = EC.presence_of_element_located((By.CLASS_NAME, 'subEvent'))
+        WebDriverWait(driver, timeout).until(element_present)
+    except TimeoutException:
+        print("Timed out waiting for page to load")
+
+    dom = driver.page_source
+
+    soup = BeautifulSoup(dom, 'lxml')
+
+    return soup
 
 
 if __name__ == "__main__":
-    event_list = get_event_list('2021-02-23')
-    pool = Pool(processes=10)
-    pool.starmap(scrape_event, event_list)
-    pool.close()
+    event_list = get_event_list('2021-04-09')
+    # pool = Pool(processes=5)
+    # pool.starmap(scrape_event, event_list)
+    # pool.close()
+
+    for event in event_list:
+        scrape_event(event[0], event[1], event[2], event[3])
+
     # fight_list = get_fight_list()
     # pool = Pool(processes=15)
     # pool.map(add_details_to_fight, fight_list)
