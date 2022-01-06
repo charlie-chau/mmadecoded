@@ -56,25 +56,25 @@ def scrape_events_list(events_list):
 
 
 def soupify_page(url):
-    # dom = simple_get(url)
-    # print(dom)
-    # soup = BeautifulSoup(dom, 'lxml')
-
-    driver = webdriver.Chrome(executable_path='chromedriver.exe')
-    driver.implicitly_wait(100)
-    driver.get(url)
-    # driver.get('https://www.google.com.au')
-    timeout = 5
-
-    try:
-        element_present = EC.presence_of_element_located((By.CLASS_NAME, 'recentfights_tab'))
-        WebDriverWait(driver, timeout).until(element_present)
-    except TimeoutException:
-        print("Timed out waiting for page to load")
-
-    dom = driver.page_source
-
+    dom = simple_get(url)
+    print(dom)
     soup = BeautifulSoup(dom, 'lxml')
+
+    # driver = webdriver.Chrome(executable_path='chromedriver.exe')
+    # driver.implicitly_wait(100)
+    # driver.get(url)
+    # # driver.get('https://www.google.com.au')
+    # timeout = 5
+    #
+    # try:
+    #     element_present = EC.presence_of_element_located((By.CLASS_NAME, 'recentfights_tab'))
+    #     WebDriverWait(driver, timeout).until(element_present)
+    # except TimeoutException:
+    #     print("Timed out waiting for page to load")
+    #
+    # dom = driver.page_source
+    #
+    # soup = BeautifulSoup(dom, 'lxml')
 
     return soup
 

@@ -2,7 +2,7 @@ import csv
 import json
 
 fights = []
-with open('input/20210709.csv', newline='') as csvfile:
+with open('input/20211120.csv', newline='') as csvfile:
     reader = csv.reader(csvfile)
     for line in reader:
         fight = {
